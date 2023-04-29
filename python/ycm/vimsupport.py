@@ -684,7 +684,7 @@ def JumpToFile( filename, command, modifiers ):
 def JumpToLocation( filename, line, column, modifiers, command ):
   # Add an entry to the jumplist
   vim.command( "normal! m'" )
-
+  command='new-or-existing-tab'
   if filename != GetCurrentBufferFilepath():
     # We prefix the command with 'keepjumps' so that opening the file is not
     # recorded in the jumplist. So when we open the file and move the cursor to

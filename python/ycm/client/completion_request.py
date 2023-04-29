@@ -182,6 +182,33 @@ def _GetCompletionInfoField( completion_data ):
   # cannot evaluate such characters so they are removed.
   return info.replace( '\x00', '' )
 
+def MapCharToEmoji(char):
+  db={
+      'class':'👾',
+      'method':'⚡',
+      'function':'⚡',
+      'field':'💧',
+      'interface':'🔖',
+      'struct':'💎',
+      'folder':'📁',
+      'file':'📜',
+      'text':'📃',
+      'reference':'🎏',
+      'property':'🪧',
+      'constructor':'✨',
+      'statement':'🌀',
+      'instance':'🧩',
+      'module':'🧰',
+      'enummember':'🎫',
+      'variable':'🐻',
+      'enum':'🧮',
+      'snippet':'🎀',
+      'keyword':'📐',
+      
+   }
+  if char not in db: return char
+  else:
+    return db[char]
 
 def ConvertCompletionDataToVimData( completion_data ):
   # See :h complete-items for a description of the dictionary fields.
@@ -199,13 +226,15 @@ def ConvertCompletionDataToVimData( completion_data ):
       if not preview_info.startswith( extra_menu_info ):
         preview_info = extra_menu_info + '\n\n' + preview_info
       extra_menu_info = extra_menu_info[ : ( max_width - 3 ) ] + '...'
+  kind_literal=ToUnicode( completion_data.get( 'kind', '' ) ).lower()
+  kind_string=kind_literal[ :1 ].lower()
 
   return {
     'word'     : completion_data[ 'insertion_text' ],
     'abbr'     : completion_data.get( 'menu_text', '' ),
     'menu'     : extra_menu_info,
     'info'     : preview_info,
-    'kind'     : ToUnicode( completion_data.get( 'kind', '' ) )[ :1 ].lower(),
+    'kind'     : MapCharToEmoji(kind_literal),
     # Disable Vim filtering.
     'equal'    : 1,
     'dup'      : 1,
